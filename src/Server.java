@@ -49,5 +49,4 @@ public class Server extends JFrame{
             System.err.println(ex);
         }
     }
-
 }
