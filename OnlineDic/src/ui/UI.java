@@ -1,9 +1,12 @@
 package ui;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
+//import javax.swing.border.TitledBorder;
 
 public class UI{
+	ReturnTranslateResult returnTranslateResult=new ReturnTranslateResult();
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args){
@@ -17,9 +20,9 @@ public class UI{
 	JLabel label = new JLabel("input");//标签
 	JLabel label1 = new JLabel("Online Dictionary");//标签
 	JButton jbt = new JButton("Search");//按钮
-	JCheckBox jchk1 = new JCheckBox("百度",false);//复选框
-	JCheckBox jchk2 = new JCheckBox("有道",false);
-	JCheckBox jchk3 = new JCheckBox("金山",false);
+	JCheckBox jchk1 = new JCheckBox("bing",false);//复选框
+	JCheckBox jchk2 = new JCheckBox("YouDao",false);
+	JCheckBox jchk3 = new JCheckBox("Jinshan",false);
 	JTextField jtf = new JTextField();//文本框
 	
 	JPanel jp1 = new JPanel();
@@ -37,14 +40,10 @@ public class UI{
 	JTextArea jta1 = new JTextArea();
 	JTextArea jta2 = new JTextArea();
 	JTextArea jta3 = new JTextArea();
-	
-
-
 
 
 	
 	public UI(){
-		
 //框架		
 //		frame.setLayout(new BorderLayout());
 		frame.setSize(600, 650);
@@ -81,7 +80,7 @@ public class UI{
 		jp1.setBackground(Color.white);	
 		jp1.setLayout(null);
 		
-		ImageIcon image1 = new ImageIcon("baidu.png");
+		ImageIcon image1 = new ImageIcon("bing.png");
 		image1.setImage(image1.getImage().getScaledInstance(30, 30,Image.SCALE_DEFAULT ));
 		jlb1.setIcon(image1);
 		jlb1.setSize(30, 30);
@@ -169,9 +168,26 @@ public class UI{
 		jp3.setVisible(true);
 		frame.getContentPane().add(jp3,BorderLayout.CENTER);	
 		
-		
+		jbt.addActionListener(new ButtonListener());
 	}
 		
 		frame.setVisible(true);
 	}
+	private class ButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            String wordsToTranslate=jtf.getText();
+            jta1.setText(returnTranslateResult.bingTranslate(wordsToTranslate));
+            jta2.setText(returnTranslateResult.YouDaoTranslate(wordsToTranslate));
+            jta3.setText(returnTranslateResult.JinshanTranslate(wordsToTranslate));
+
+
+        }
+
+
+
+
+    }
+
+
+
 }
