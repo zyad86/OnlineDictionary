@@ -53,4 +53,17 @@ public class ReturnTranslateResult {
     }
 
 
+    public String  BaiduTranslate(String WordsToTranslate){
+//http://dict.baidu.com/s?wd=explain&ptype=english
+        String s=HttpRequest.sendGet("http:/dict.baidu.com/s",
+                "wd="+WordsToTranslate+"&ptype=english");
+
+        System.out.println(s);
+
+        return s;
+
+
+    }
+
+
 }

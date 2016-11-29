@@ -20,9 +20,9 @@ public class UI{
 	JLabel label = new JLabel("input");//标签
 	JLabel label1 = new JLabel("Online Dictionary");//标签
 	JButton jbt = new JButton("Search");//按钮
-	JCheckBox jchk1 = new JCheckBox("bing",false);//复选框
+	JCheckBox jchk1 = new JCheckBox("Bing",false);//复选框
 	JCheckBox jchk2 = new JCheckBox("YouDao",false);
-	JCheckBox jchk3 = new JCheckBox("Jinshan",false);
+	JCheckBox jchk3 = new JCheckBox("JinShan",false);
 	JTextField jtf = new JTextField();//文本框
 	
 	JPanel jp1 = new JPanel();
@@ -65,11 +65,11 @@ public class UI{
 		
 		
 //复选框		
-		jchk1.setBounds(35, 90, 70, 28);
+		jchk1.setBounds(35, 90, 100, 28);
 		frame.add(jchk1);
-		jchk2.setBounds(230, 90, 70, 28);
+		jchk2.setBounds(230, 90, 100, 28);
 		frame.add(jchk2);
-		jchk3.setBounds(420, 90, 70, 28);
+		jchk3.setBounds(420, 90, 100, 28);
 		frame.add(jchk3);
 //文本框
 		jtf.setBounds(80, 50, 350, 28);
@@ -179,6 +179,7 @@ public class UI{
             jta1.setText(returnTranslateResult.bingTranslate(wordsToTranslate));
             jta2.setText(returnTranslateResult.YouDaoTranslate(wordsToTranslate));
             jta3.setText(returnTranslateResult.JinshanTranslate(wordsToTranslate));
+			returnTranslateResult.BaiduTranslate(wordsToTranslate);
 
 
         }
