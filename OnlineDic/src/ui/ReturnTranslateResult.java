@@ -4,6 +4,8 @@ import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 import java.util.ArrayList;
 
+import jsonparser.parserjson;
+
 /**
  * Created by stdzysta on 2016/11/28.
  */
@@ -63,6 +65,5 @@ public class ReturnTranslateResult {
 
 
     }
-
 
 }
