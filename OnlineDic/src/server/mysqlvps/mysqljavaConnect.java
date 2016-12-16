@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
-
 public class mysqljavaConnect {
     public static void main(String[] args) {
         String driverName="com.mysql.jdbc.Driver";

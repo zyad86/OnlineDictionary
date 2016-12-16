@@ -2,7 +2,6 @@ package ui;
 import api.demo.HttpRequest;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
-
 import java.util.ArrayList;
 
 /**
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 public class ReturnTranslateResult {
     public String WordsToTranslate;
     ArrayList<String> arrayRestore=new ArrayList<String>();
-
 
 
     public static void main(String[] args) {
@@ -29,10 +27,11 @@ public class ReturnTranslateResult {
 
     public String bingTranslate(String WordsToTranslate){
         //http://fanyi.youdao.com/openapi.do?keyfrom=<keyfrom>&key=<key>&type=data&doctype=<doctype>&version=1.1&q=要翻译的文本
-        Translate.setClientId("onlinedict-demo");
-        Translate.setClientSecret("Agow2xdIQe1m1JN519RP9wLHKNcNAyXHB1I+EPko1qs=");
+        //Translate.setClientId("onlinedict-demo");
+        //Translate.setClientSecret("Agow2xdIQe1m1JN519RP9wLHKNcNAyXHB1I+EPko1qs=");
         try {
-    String translatedText = Translate.execute(WordsToTranslate, Language.ENGLISH, Language.CHINESE_SIMPLIFIED);
+ //   String translatedText = Translate.execute(WordsToTranslate, Language.ENGLISH, Language.CHINESE_SIMPLIFIED);
+            String translatedText=HttpRequest.sendGet("http://xtk.azurewebsites.net/BingDictService.aspx?Word=",WordsToTranslate);
             return translatedText;
         }catch(java.lang.Exception e){
     System.out.println(e);
