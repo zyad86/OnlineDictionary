@@ -26,12 +26,14 @@ public class parserjson
             //  String youdaotranslationall=m.group(0);
             // System.out.println("Found value: " + m.group(0) );
             //System.out.println("Found value: " + m.group(1) );
-            String youdaoTranslation=m.group(1);
             // System.out.println("Found value: " + m.group(2) );
-            String youdaoTranslationBasic=m.group(2);
-            // System.out.println("Found value: " + m.group(3) );
-            String youdaoTranslationWeb=m.group(3);
+            // System.out.println("Found value: " +
             //System.out.println("Found value: " + youdaoTranslationBasic);
+
+            String youdaoTranslation=m.group(1);
+            String youdaoTranslationBasic=m.group(2);
+            String youdaoTranslationWeb=m.group(3);
+
 
             pattern="(.+?),\"\\bexplains\\b\":\\[(.+?)\\]";
             r = Pattern.compile(pattern);
@@ -49,7 +51,20 @@ public class parserjson
                 return "No match";
             }
 
-            return youdaoTranslationBasicPronuciation+"\n"+youdaoTranslationBasicExplains;
+
+            String[] splitString = youdaoTranslationBasicPronuciation.split("\"");
+            String afterSplit="";
+            for (int i = 0 ; i <splitString.length ; i++ ) {
+               afterSplit+=splitString[i];
+            }
+
+            String[] splitStringtwo = youdaoTranslationBasicExplains.split("\"");
+            String afterSplitwo="";
+            for (int i = 0 ; i <splitStringtwo.length ; i++ ) {
+                afterSplitwo+=splitStringtwo[i];
+            }
+
+            return afterSplit+"\n"+afterSplitwo;
         } else {
             System.out.println("NO MATCH");
             return "No match";
@@ -62,18 +77,24 @@ public class parserjson
         String line = returnJson;
         //return  returnJson;
         String pattern = ".+?\\bdefs\\b\":\\[(.+?)\\]" ;
-
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(line);
 
         if (m.find( )) {
             //System.out.println("Found value: " + m.group(1) );
+            String BingExplain=m.group(1);
+            String[] splitString = BingExplain.split("\"\\},\\{\"");
+            String afterSplit="";
+            for (int i = 0 ; i <splitString.length ; i++ ) {
+                afterSplit+=splitString[i];
+               // System.out.println(afterSplit);
+            }
             return  m.group(1);
         } else {
             System.out.println("NO MATCH");
             return "No match";
         }
-/*used to sort mp3
+        /*used to sort mp3
         String pattern = ".+?\\bAmE\\b\":\"(.+?)\",\"" +
                 "\\bAmEmp3\\b\":\"(.+?)\",\"\\bBrE\\b\":\"" +
                 "(.+?)\",\"\\bBrEmp3\\b" ;
@@ -94,9 +115,6 @@ public class parserjson
         return "No match";*/
     }
 
-
-
-
     public static String JinShanTranslate(String Wordstotransalte){
         String returnJson= UtilTranslateAPI.JinshanTranslate(Wordstotransalte);
         String line = returnJson;
@@ -108,14 +126,14 @@ public class parserjson
         Matcher m = r.matcher(line);
 
         if (m.find( )) {
-
-
-             System.out.println("Found value: " + m.group(1) );
-           // String youdaoTranslationBasic=m.group(2);
-             System.out.println("Found value: " + m.group(3) );
+            // System.out.println("Found value: " + m.group(1) );
+            // System.out.println("Found value: " + m.group(3) );
+            // String youdaoTranslationBasic=m.group(2);
            // String youdaoTranslationWeb=m.group(3);
            // System.out.println("Found value: " + youdaoTranslationBasic);
+
             return m.group(1)+"\n"+m.group(2)+m.group(3);
+
         } else {
             System.out.println("NO MATCH");
             return "No match";
@@ -125,6 +143,8 @@ public class parserjson
 
     public static void main( String args[] ){
 
+        System.out.println( BingTranslate("fantasy"));
+        System.out.println( YouDaoTranslate("fantasy"));
         System.out.println( JinShanTranslate("fantasy"));
     }
 }
