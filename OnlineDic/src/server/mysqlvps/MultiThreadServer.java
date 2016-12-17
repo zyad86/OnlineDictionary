@@ -5,7 +5,6 @@ package server.mysqlvps;
  import java.util.*;
  import java.awt.*;
  import javax.swing.*;
-
 /**
  * Created by stdzysta on 2016/12/17.
  */
@@ -17,9 +16,6 @@ public class MultiThreadServer  extends JFrame{
     }
 
     public MultiThreadServer() {
-
-
-
         setLayout(new BorderLayout());
         add(new JScrollPane(jta), BorderLayout.CENTER);
         setTitle("MultiThreadServer");
@@ -66,7 +62,7 @@ public class MultiThreadServer  extends JFrame{
             try{
                 ObjectInputStream inputFromClient=new ObjectInputStream(
                         socket.getInputStream());
-                ObjectOutputStream outputToClient=new DataOutputStream(
+                ObjectOutputStream outputToClient=new ObjectOutputStream(
                         socket.getOutputStream());
                 while(true) {
 
