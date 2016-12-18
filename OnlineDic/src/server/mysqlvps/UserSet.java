@@ -14,8 +14,6 @@ package server.mysqlvps;
  * 7  发送单词卡
  */
 
-import com.sun.xml.internal.fastinfoset.algorithm.BuiltInEncodingAlgorithm;
-import sun.plugin.services.WPlatformService;
 
 /**
  * errorcode
@@ -111,6 +109,8 @@ public class UserSet implements java.io.Serializable{
         this.user_Send=user_Send;
     }
 
+
+
     /**
      * Server function return signup/login errorcode
      * @param serviceType
@@ -188,7 +188,6 @@ public class UserSet implements java.io.Serializable{
     public String getUser_Online(){
         return user_Online;
     }
-
     public int getServiceType(){
         return serviceType;
     }

@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.Statement;
 //Define Company YouDao 1 Bing 2 JinShan 3
 
-
 /**
  * Created by stdzysta on 2016/12/18.
  */

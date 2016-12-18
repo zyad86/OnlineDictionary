@@ -5,6 +5,7 @@ package server.mysqlvps;
  */
 //This class mainly to realize the function of SQL
 import com.sun.org.apache.bcel.internal.generic.NEW;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.sql.DriverManager;
@@ -145,6 +146,7 @@ public class MySQLConnect {
          if(checkUserLoginName(NewUser_login))
             return 1;
         else {
+            errorcode=2;
             Connection conn = null;
             Statement stmt = null;
             try {// 注册 JDBC 驱动
@@ -165,7 +167,7 @@ public class MySQLConnect {
                 sql="INSERT INTO userlist " +
                         "VALUES ("+idNext+",\'"+ NewUser_login+"\',\'" +
                         User_passwd+"\',"+"curDate());";
-                errorcode=2;
+
                 stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 rs = stmt.getGeneratedKeys();
                 int keyValue = -1;
@@ -202,7 +204,44 @@ public class MySQLConnect {
         }
     }
 
-
+    public static String returnUserlist() {
+        String userList="";
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Connect sql...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("selecting...");
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT user_login FROM userlist ";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+               // System.out.print(rs.getString("user_Login"));
+                userList+=rs.getString("user_Login")+"\n";
+            }
+                rs.close();
+                stmt.close();
+                conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (stmt != null) stmt.close();
+                } catch (SQLException se2) {
+                    try {
+                        if (conn != null) conn.close();
+                    } catch (SQLException se) {
+                        se.printStackTrace();
+                    }
+                }
+            }
+            System.out.println("Goodbye!");
+         return userList;
+    }
 
 
 

@@ -65,7 +65,7 @@ public class trialclient extends JFrame {
         public void actionPerformed(ActionEvent e){
             try {
                 toServer = new ObjectOutputStream(socket.getOutputStream());
-                String loginuse = "test123";
+                String loginuse = "test123411111111eee111111";
                 String loginpasswd = "test";
                 UserSet s = new UserSet(0,loginuse, loginpasswd);
                 toServer.writeObject(s);
