@@ -70,9 +70,18 @@ public class MySQLConnect {
         return ExistOrNot;
     }
 
-    public static int signInOldUser(String Userlogin,String UserPasswd) {
+    /**
+     * errorcode define
+     *     0:login success
+     *     1:wrong passwd
+     *     2:User didn't exist
+     * @param Userlogin
+     * @param UserPasswd
+     * @return
+     */
+    public static int loginOldUser(String Userlogin,String UserPasswd) {
         int errorCode = 1;
-        //define 0:login success 1:wrong passwd  2:User didn't exist
+
         if (!checkUserLoginName(Userlogin)) {
             errorCode = 2;
             return errorCode;
@@ -121,10 +130,19 @@ public class MySQLConnect {
             }
         }
 
+    /**
+     * define
+     * 0:success
+     * 1:userlogin exist
+     * 2:invalid username or length out of range
+     *
+     * @param NewUser_login
+     * @param User_passwd
+     * @return
+     */
     public static int sigUpNewUser(String NewUser_login,String User_passwd){
         int errorcode=1;
-        //define 0:success  1:userlogin exist 2:invalid username or length out of range
-        if(checkUserLoginName(NewUser_login))
+         if(checkUserLoginName(NewUser_login))
             return 1;
         else {
             Connection conn = null;
@@ -192,6 +210,6 @@ public class MySQLConnect {
     public static void main(String[] args) {
 
         //System.out.println("Result \n"+checkUserLoginName("+1s"));
-        System.out.println("end:"+signInOldUser("test","test123"));
+        System.out.println("end:"+loginOldUser("test","test123"));
     }
 }

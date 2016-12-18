@@ -1,7 +1,5 @@
 package ui;
 import api.demo.HttpRequest;
-import com.memetix.mst.language.Language;
-import com.memetix.mst.translate.Translate;
 import java.util.ArrayList;
 
 import jsonparser.parserjson;

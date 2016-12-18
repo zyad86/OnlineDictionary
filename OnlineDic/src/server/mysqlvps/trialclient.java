@@ -1,28 +1,23 @@
 package server.mysqlvps;
-
-
+import javafx.beans.binding.ObjectExpression;
 import javafx.scene.control.cell.TextFieldListCell;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-
+import java.io.*;
+import java.net.*;
 /**
  * Created by stdzysta on 2016/12/17.
  */
 public class trialclient extends JFrame {
-
     private JTextField jtf=new JTextField();
-
     private JTextArea jta=new JTextArea();
+    private Socket socket;
 
-    private DataOutputStream toServer;
-    private DataInputStream fromServer;
+    private ObjectOutputStream toServer;
+    private ObjectInputStream fromServer;
     public static void main(String [] args){
         new trialclient();
 
@@ -48,12 +43,9 @@ public class trialclient extends JFrame {
         boolean connected=false;
 
         while(!connected){
-
             try{
-                Socket socket=new Socket("localhost",8000);
-                fromServer=new DataInputStream(socket.getInputStream());
-                toServer=
-                        new DataOutputStream(socket.getOutputStream());
+                 socket=new Socket("localhost",8000);
+              //  double radius=Double.parseDouble(jtf.getText().trim());
                 connected=true;
             }
             catch (IOException ex){
@@ -69,23 +61,26 @@ public class trialclient extends JFrame {
         }
     }
 
-
     private class TextFieldListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
-            try{
-                double radius=Double.parseDouble(jtf.getText().trim());
-                toServer.writeDouble(radius);
+            try {
+                toServer = new ObjectOutputStream(socket.getOutputStream());
+                String loginuse = "test123";
+                String loginpasswd = "test";
+                UserSet s = new UserSet(0,loginuse, loginpasswd);
+                toServer.writeObject(s);
+                //  toServer.writeDouble(radius);
                 toServer.flush();
-
-                double area=fromServer.readDouble();
-
-                jta.append("Radius is" +radius+"\n");
-                jta.append("Area received from the server is"+area+"\n");
-            }
-            catch(IOException ex){
-                System.err.println(ex);
+                fromServer = new ObjectInputStream(socket.getInputStream());
+                try {
+                    UserSet t = (UserSet) fromServer.readObject();
+                    System.out.println(t.getServiceType() + "\t" + t.getErrorcode());
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+            }catch (IOException ex1){ex1.printStackTrace();}
+            jta.append("serviceType" +"\n");
+            jta.append("Area received from the server is"+"\n");
             }
         }
-
     }
-}

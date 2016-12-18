@@ -5,12 +5,13 @@ package server.mysqlvps;
  import java.util.*;
  import java.awt.*;
  import javax.swing.*;
+ import jsonparser.parserjson;
+
 /**
  * Created by stdzysta on 2016/12/17.
  */
 public class MultiThreadServer  extends JFrame{
     private JTextArea jta=new JTextArea();
-
     public static void main(String[] args){
         new MultiThreadServer();
     }
@@ -26,20 +27,17 @@ public class MultiThreadServer  extends JFrame{
         try {
             ServerSocket serverSocket = new ServerSocket(8000);
             jta.append("Server started at" + new Date() + '\n');
-
             int clientNo = 1;
-
             while (true) {
                 Socket socket = serverSocket.accept();
-
                 jta.append("Starting thread for client" + clientNo +
                         "at" + new Date() + "\n");
-
+                //socket.getRemoteSocketAddress();
                 InetAddress inetAddress = socket.getInetAddress();
                 jta.append("Client" + clientNo + "'s host name is " +
                         inetAddress.getHostName() + "\n");
                 jta.append("Client" + clientNo + "'s IP Address is"
-                        + inetAddress.getHostAddress() + "\n");
+                        + socket.getRemoteSocketAddress()+ "\n");
 
                 HandleAClient task = new HandleAClient(socket);
                 new Thread(task).start();
@@ -50,14 +48,12 @@ public class MultiThreadServer  extends JFrame{
         }
     }
 
-
     class HandleAClient implements Runnable {
         private Socket socket;
 
         public HandleAClient(Socket socket){
             this.socket=socket;
         }
-
         public void run(){
             try{
                 ObjectInputStream inputFromClient=new ObjectInputStream(
@@ -65,15 +61,40 @@ public class MultiThreadServer  extends JFrame{
                 ObjectOutputStream outputToClient=new ObjectOutputStream(
                         socket.getOutputStream());
                 while(true) {
+                    UserSet getfromClient=(UserSet) inputFromClient.readObject();
 
-                    double radius = inputFromClient.readDouble();
-                    double area = radius * radius * Math.PI;
-                    outputToClient.writeDouble(area);
-                    jta.append("Radius received from client:" + radius + '\n');
-                    jta.append("Area found:" + area + '\n');
+                    switch (getfromClient.getServiceType())
+                    {
+                        /**
+                         * 0  注册 return error code
+                         */
+                        case 0: {
+                            String userLogin=getfromClient.getUser_login();
+                            String userPasswd=getfromClient.getUser_passwd();
+                            int errorCode=MySQLConnect.sigUpNewUser(userLogin,userPasswd);
+                            jta.append("Receive Object:" + getfromClient.getUser_login() + '\n'
+                                    +getfromClient.getUser_passwd()+"\t"+errorCode);
+
+                            UserSet returnSort=new UserSet(0,errorCode);
+                            outputToClient.writeObject(returnSort);
+
+                        } ;break;
+                        case 1: {} ;break;
+                        case 2: {} ;break;
+                        case 3: {} ;break;
+                        case 4: {} ;break;
+                        case 5: {} ;break;
+                        case 6: {} ;break;
+                        case 7: {} ;break;
+                        default:{};break;
+
+                    }
+
                 }
             }catch (IOException e){
                 System.err.println(e);
+            }catch(ClassNotFoundException e){
+                e.printStackTrace();
             }
         }
     }
