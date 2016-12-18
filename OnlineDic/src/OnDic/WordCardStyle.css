@@ -1,0 +1,15 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/*root类选择器给所有的元素设置样式*/
+.root {
+    -fx-font-family: "微软雅黑";
+    -fx-font-size: 12px;
+    -fx-background-size: stretch stretch;
+    -fx-background-image: url(background.jpg);
+    -fx-background-position: center center;
+}
+
+.lable {
+    -fx-font-size: 12px;
+    -fx-font-weight: bolder;
+    -fx-text-fill: black;
+}

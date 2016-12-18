@@ -1,11 +1,11 @@
- package server.mysqlvps;
- import jdk.internal.org.objectweb.asm.Handle;
- import java.io.*;
- import java.net.*;
- import java.util.*;
- import java.awt.*;
- import javax.swing.*;
- import jsonparser.parserjson;
+package server.mysqlvps;
+import jdk.internal.org.objectweb.asm.Handle;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.awt.*;
+import javax.swing.*;
+import jsonparser.parserjson;
 
 /**
  * Created by stdzysta on 2016/12/17.
@@ -228,6 +228,20 @@ public class MultiThreadServer  extends JFrame{
  }
  *
  * 3
+
+ toServer = new ObjectOutputStream(socket.getOutputStream());
+ UserSet s = new UserSet(5);
+ toServer.writeObject(s);
+ toServer.flush();
+ fromServer = new ObjectInputStream(socket.getInputStream());
+ try {
+ UserSet t = (UserSet) fromServer.readObject();
+ int []favorCount=t.getFavorCount();
+ System.out.println(t.getServiceType() + "\t" + t.getErrorcode());
+ } catch (ClassNotFoundException ex) {
+ ex.printStackTrace();
+ }
+
  toServer = new ObjectOutputStream(socket.getOutputStream());
  String word = "test";
  UserSet s = new UserSet(3,word);
@@ -246,6 +260,14 @@ public class MultiThreadServer  extends JFrame{
  *
  *4
  用户点赞单词没有返hui
+ toServer = new ObjectOutputStream(socket.getOutputStream());
+ String word = "fantasy";
+ String user_login="test";
+ int favorCompany=1;
+ UserSet s = new UserSet(4,user_login,word,favorCompany);
+ toServer.writeObject(s);
+ toServer.flush();
+
  *
  *
  * 5
@@ -256,7 +278,7 @@ public class MultiThreadServer  extends JFrame{
  fromServer = new ObjectInputStream(socket.getInputStream());
  try {
  UserSet t = (UserSet) fromServer.readObject();
-    int []favorCount=t.getFavorCount();
+ int []favorCount=t.getFavorCount();
  System.out.println(t.getServiceType() + "\t" + t.getErrorcode());
  } catch (ClassNotFoundException ex) {
  ex.printStackTrace();
