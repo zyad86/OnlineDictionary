@@ -2,8 +2,9 @@ package server.mysqlvps;
 /**
  * Created by stdzysta on 2016/12/18.
  */
-//define ServiceType
+
 /**
+ * define ServiceType
  * 0  注册
  * 1  登录
  * 2  返回值确定注册和登录的errorcode
@@ -12,6 +13,7 @@ package server.mysqlvps;
  * 5  每隔2s返回目前某单词的三个翻译的排行
  * 6  查看所有人员 以及在线离线状况
  * 7  发送单词卡
+ * 8  查看动态
  */
 
 
@@ -22,7 +24,7 @@ package server.mysqlvps;
  * 1:userlogin exist
  * 2:invalid username or length out of range
  *
- * sign in
+ * log in
  * define 0:login success
  * 1:wrong passwd
  * 2:User didn't exist
@@ -44,10 +46,12 @@ public class UserSet implements java.io.Serializable{
     public String user_Send;
     public String all_User;
     public String user_Online;
+    public String getWordCard;
     public int serviceType;
     public int errorCode;
     public int favorCompany;
     public int[] favorCount=new int[3];
+
 
 
     /**
@@ -66,6 +70,8 @@ public class UserSet implements java.io.Serializable{
     /**
      * User function search word
      * User function return favorCount //点赞排行顺序
+     * User function Send card retrieve request String is name
+     *
      * @param word
      * @param serviceType
      */
@@ -89,6 +95,8 @@ public class UserSet implements java.io.Serializable{
     }
     /**
      * User function get allusers and Users online
+     * Server function get wordCard
+     * Userfunction get count;
      * @param serviceType
      */
     public UserSet(int serviceType){
@@ -108,7 +116,6 @@ public class UserSet implements java.io.Serializable{
         this.user_Login=user_Login;
         this.user_Send=user_Send;
     }
-
 
 
     /**
@@ -151,43 +158,42 @@ public class UserSet implements java.io.Serializable{
         this.all_User = all_User;
         this.user_Online = user_Online;
     }
-//word card to continue
+
+    public UserSet(String UserReceive){
+        getWordCard=UserReceive;
+    }
+
+
+    //word card to continue
     //public UserSet()
-
-
     public String getUser_login(){
         return user_Login;
     }
-
     public String getUser_passwd(){
         return user_Passwd;
     }
-
     public String getWord(){
         return word;
     }
-
     public String getYouDaoTranslation(){
         return youDaoTranslation;
     }
     public String getBingTranslation(){
         return bingTranslation;
     }
-
     public String getJinshanTranslation(){
         return jinShanTranslation;
     }
     public String getUser_send(){
         return user_Send;
     }
-
     public String getAll_User(){
         return all_User;
     }
-
     public String getUser_Online(){
         return user_Online;
     }
+    public String getGetWordCard(){return getWordCard;}
     public int getServiceType(){
         return serviceType;
     }

@@ -5,7 +5,7 @@ package server.mysqlvps;
  */
 //This class mainly to realize the function of SQL
 import com.sun.org.apache.bcel.internal.generic.NEW;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+
 
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.sql.DriverManager;
@@ -204,6 +204,11 @@ public class MySQLConnect {
         }
     }
 
+    /**
+     * return userlist up to now
+     * @return
+     */
+
     public static String returnUserlist() {
         String userList="";
         Connection conn = null;
@@ -243,7 +248,67 @@ public class MySQLConnect {
          return userList;
     }
 
-
+    /**
+     * define errorcode Too
+     * 0:success
+     * 1:userSentNotExist
+     * 2:Word Too long or other error
+     *
+     * @param userSend
+     * @param userReceive
+     * @param word
+     * @return
+     */
+    public static int sendWord(String userSend,String userReceive,String word){
+        //here should have an errorCode too
+        int errorCode=1;
+        if(checkUserLoginName(userReceive)){
+            errorCode=2;
+            Connection conn = null;
+            Statement stmt = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                System.out.println("Connect sql...");
+                conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                System.out.println("selecting...");
+                stmt = conn.createStatement();
+                String sql;
+                sql="INSERT INTO UserSentCard " +
+                        "VALUES ("+"\'"+userSend+"\',\'"+ userReceive+"\',\'" +
+                        word+"\'"+");";
+                stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = stmt.getGeneratedKeys();
+                int keyValue = -1;
+                if (rs.next()) {
+                    keyValue = rs.getInt(1);
+                }
+                if(keyValue>0)
+                    errorCode=0;
+                rs.close();
+                stmt.close();
+                conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } catch (Exception e) {
+                // 处理 Class.forName 错误
+                e.printStackTrace();
+            } finally {
+                // 关闭资源
+                try {
+                    if (stmt != null) stmt.close();
+                } catch (SQLException se2) {
+                }// 什么都不做
+                try {
+                    if (conn != null) conn.close();
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }
+            }}
+            else {
+                errorCode=1;
+        }
+        return errorCode;
+        }
 
 
     public static void main(String[] args) {
