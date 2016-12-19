@@ -19,6 +19,11 @@ public class MultiThreadServer  extends JFrame{
     }
 
     public MultiThreadServer() {
+
+        checkOnlineOrNot checkOnlineTask=new checkOnlineOrNot();
+        new Thread(checkOnlineTask).start();
+
+
         setLayout(new BorderLayout());
         add(new JScrollPane(jta), BorderLayout.CENTER);
         setTitle("MultiThreadServer");
@@ -51,20 +56,18 @@ public class MultiThreadServer  extends JFrame{
     }
     class checkOnlineOrNot implements Runnable{
         /**
-         * every time every oprate will add to onlineList
+         * every time every oprate will remove all user to onlineList
          * every
          */
-
         public void run(){
-
-
-
-
-
-
+        try{
+            Thread.sleep(60000);}
+            catch (InterruptedException ex){
+            ex.printStackTrace();
+        }
+        usersOnline.clear();
 
         }
-
     }
 
 
@@ -120,7 +123,21 @@ public class MultiThreadServer  extends JFrame{
                         /**
                          * No using function  it is preset And no used after
                          */
-                        case 2: {} break;
+                        case 2: {
+                            //every 15s
+                            boolean userOnlineExist=false;
+                            String userLoginOnline=getfromClient.getWord();
+                            for(int i=0;i<usersOnline.size();i++){
+                                if(userLoginOnline==usersOnline.get(i))
+                                {
+                                    userOnlineExist=true;
+                                    break;
+                                }
+                            }
+                            if(!userOnlineExist){
+                                usersOnline.add(userLoginOnline);
+                            }
+                        } break;
                         /**
                          * Search Word
                          */
@@ -161,18 +178,20 @@ public class MultiThreadServer  extends JFrame{
                         }break;
                         /**
                          *Send WordCard
+                         * refresh state
                          */
                         case 7: {
+                            MySQLConnect.sendWord(getfromClient.getUser_login(),
+                                    getfromClient.getUser_send(),getfromClient.getWord());
+
                             //发送的同时刷新一下动态吧
                         }
 
                         case 8: {
                             String  user_Login=getfromClient.getWord();
-
-
-
-
-
+                            String messageGet=MySQLConnect.returnWordCardList(user_Login);
+                            UserSet returnSet=new UserSet(messageGet);
+                            outputToClient.writeObject(returnSet);
                         }
                         default:{} break;
 
@@ -226,6 +245,33 @@ public class MultiThreadServer  extends JFrame{
  } catch (ClassNotFoundException ex) {
  ex.printStackTrace();
  }
+ *
+ * 2
+ *
+ class checkOnlineOrNot implements Runnable{
+public void run(){
+    try{
+        Thread.sleep(15000);}
+    catch (InterruptedException ex){
+        ex.printStackTrace();
+    }
+ toServer = new ObjectOutputStream(socket.getOutputStream());
+ String loginuse = "test";
+ UserSet s = new UserSet(2,loginuse);
+ toServer.writeObject(s);
+ toServer.flush();
+ fromServer = new ObjectInputStream(socket.getInputStream());
+ try {
+ UserSet t = (UserSet) fromServer.readObject();
+ System.out.println(t.getServiceType() + "\t" + t.getErrorcode());
+ } catch (ClassNotFoundException ex) {
+ ex.printStackTrace();
+ }
+
+}
+}
+
+ *
  *
  * 3
 
@@ -294,11 +340,62 @@ public class MultiThreadServer  extends JFrame{
  UserSet t = (UserSet) fromServer.readObject();
  String all_User=t.getAll_User();
  String user_Online=t.getUser_Online();
- System.out.println(t.getServiceType() + "\t" + t.getErrorcode());
  } catch (ClassNotFoundException ex) {
  ex.printStackTrace();
  *
+ *
+ * 7
+ toServer = new ObjectOutputStream(socket.getOutputStream());
+ String userSend;
+ String word;
+ String userReceive
+ UserSet s = new UserSet(7,word,userSend,userReceive);
+ toServer.writeObject(s);
+ toServer.flush();
+
+ *
+ * 8
+ toServer = new ObjectOutputStream(socket.getOutputStream());
+ String user_Login;
+ UserSet s = new UserSet(8,user_Login);
+ toServer.writeObject(s);
+ toServer.flush();
+ fromServer = new ObjectInputStream(socket.getInputStream());
+ try {
+ UserSet t = (UserSet) fromServer.readObject();
+ String wordCardList=t.getGetWordCard();
+ } catch (ClassNotFoundException ex) {
+ ex.printStackTrace();
+
  */
+
+
+/**
+ * 如果消息函数自动刷新  那就client有个线程不断获取就行；
+
+ class checkMessage implements Runnable{
+
+ public void run(){
+ try{
+ Thread.sleep(10000);}
+ catch (InterruptedException ex){
+ ex.printStackTrace();
+ }
+ toServer = new ObjectOutputStream(socket.getOutputStream());
+ String user_Login;
+ UserSet s = new UserSet(8,user_Login);
+ toServer.writeObject(s);
+ toServer.flush();
+ fromServer = new ObjectInputStream(socket.getInputStream());
+ try {
+ UserSet t = (UserSet) fromServer.readObject();
+ String wordCardList=t.getGetWordCard();
+ } catch (ClassNotFoundException ex) {
+ ex.printStackTrace();
+ }
+ }
+ */
+
 
 /**
  * define ServiceType

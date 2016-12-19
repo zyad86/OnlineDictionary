@@ -1,0 +1,49 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/*root类选择器给所有的元素设置样式*/
+.root {
+    -fx-font-family: "微软雅黑";
+    -fx-font-size: 12px;
+    -fx-background-size: stretch stretch;
+    -fx-background-image: url(background.jpg);
+    -fx-background-position: center center;
+}
+
+/*button类型选择器设置所有Button的背景色*/
+
+.button {
+    -fx-background-color: lightgrey;
+}
+
+/*hover伪类选择器设置鼠标移过Button时的背景色*/
+.button:hover {
+    -fx-background-color: grey;
+}
+#star1{
+	-fx-background-color: white;
+}
+#star1:hover{
+	-fx-background-color: yellow;
+}
+#star2{
+	-fx-background-color: white;
+}
+#star2:hover{
+	-fx-background-color: yellow;
+}
+#star3{
+	-fx-background-color: white;
+}
+#star3:hover{
+	-fx-background-color: yellow;
+}
+#login{
+	-fx-background-color: white;
+}
+#login:hover{
+	-fx-background-color: lightblue;
+}
+.lable {
+    -fx-font-size: 12px;
+    -fx-font-weight: bolder;
+    -fx-text-fill: black;
+}

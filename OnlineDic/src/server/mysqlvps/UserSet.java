@@ -7,7 +7,7 @@ package server.mysqlvps;
  * define ServiceType
  * 0  注册
  * 1  登录
- * 2  返回值确定注册和登录的errorcode
+ * 2  用于确认在线与否
  * 3  查询
  * 4  用户点赞单词
  * 5  每隔2s返回目前某单词的三个翻译的排行
@@ -71,6 +71,7 @@ public class UserSet implements java.io.Serializable{
      * User function search word
      * User function return favorCount //点赞排行顺序
      * User function Send card retrieve request String is name
+     * User function send online word=userlogin
      *
      * @param word
      * @param serviceType
@@ -194,6 +195,7 @@ public class UserSet implements java.io.Serializable{
         return user_Online;
     }
     public String getGetWordCard(){return getWordCard;}
+
     public int getServiceType(){
         return serviceType;
     }

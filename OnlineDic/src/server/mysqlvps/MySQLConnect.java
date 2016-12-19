@@ -5,8 +5,6 @@ package server.mysqlvps;
  */
 //This class mainly to realize the function of SQL
 import com.sun.org.apache.bcel.internal.generic.NEW;
-
-
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -309,6 +307,55 @@ public class MySQLConnect {
         }
         return errorCode;
         }
+
+    /**
+     *this function is used to refresh message
+     * @param userName
+     * @return
+     */
+    public static String returnWordCardList(String userName) {
+
+        String userCardList="";
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Connect sql...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("selecting...");
+            stmt = conn.createStatement();
+            String sql;
+                sql = "SELECT userSend,Word FROM UserSentCard WHERE" +
+                        "userReceive=\'"+userName+"\';";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+
+                // System.out.print(rs.getString("user_Login"));
+                userCardList+=rs.getString("userSend")+"\t";
+                userCardList+=rs.getString("Word")+"\n";
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException se2) {
+                try {
+                    if (conn != null) conn.close();
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }
+            }
+        }
+        System.out.println("Goodbye!");
+        return userCardList;
+    }
+
 
 
     public static void main(String[] args) {
