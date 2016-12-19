@@ -110,7 +110,7 @@ public class parserjson
     public static String JinShanTranslate(String Wordstotransalte){
         String returnJson= UtilTranslateAPI.JinshanTranslate(Wordstotransalte);
         String line = returnJson;
-        System.out.println(returnJson);
+        //System.out.println(returnJson);
 
         String pattern = "\\bps\\b\\>(.+?)\\<.+?\\bpos\\b\\>(.+?)\\<" +
                 ".+?\\bacceptation\\b" +

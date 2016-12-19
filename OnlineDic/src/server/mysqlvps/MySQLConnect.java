@@ -39,7 +39,7 @@ public class MySQLConnect {
             sql = "SELECT user_login FROM userlist WHERE user_login=\'"+user_Login+"\'";
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                System.out.print(rs.getString("user_Login"));
+               // System.out.print(rs.getString("user_Login"));
                 if(rs.getString("user_Login").equals(user_Login)){
 
                     ExistOrNot=true;

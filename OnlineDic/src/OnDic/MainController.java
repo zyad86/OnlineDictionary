@@ -785,7 +785,7 @@ public class MainController implements Initializable {
 
         while (!connected) {
             try {
-                socket = new Socket("localhost", 8000);
+                socket = new Socket("115.159.205.194", 8000);
                 //  double radius=Double.parseDouble(jtf.getText().trim());
                 toServer = new ObjectOutputStream(socket.getOutputStream());
                 fromServer = new ObjectInputStream(socket.getInputStream());
