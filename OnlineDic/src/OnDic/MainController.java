@@ -333,7 +333,7 @@ public class MainController implements Initializable {
                 }
             }
             if (favorCount[1] != 3) {
-                switch (favorCount[0]) {
+                switch (favorCount[1]) {
                     case 1:
                         if (count == 0)
                             output1.setText(youdao);
@@ -391,7 +391,7 @@ public class MainController implements Initializable {
                 }
             }
             if (favorCount[1] != 2) {
-                switch (favorCount[0]) {
+                switch (favorCount[1]) {
                     case 1:
                         if (count == 0)
                             output1.setText(youdao);
@@ -449,7 +449,7 @@ public class MainController implements Initializable {
                 }
             }
             if (favorCount[1] != 1) {
-                switch (favorCount[0]) {
+                switch (favorCount[1]) {
                     case 3:
                         if (count == 0)
                             output1.setText(jinshan);
