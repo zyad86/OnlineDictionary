@@ -5,6 +5,8 @@ package server.mysqlvps;
  */
 //This class mainly to realize the function of SQL
 import com.sun.org.apache.bcel.internal.generic.NEW;
+import jsonparser.parserjson;
+
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -28,10 +30,10 @@ public class MySQLConnect {
             // 注册 JDBC 驱动
             Class.forName("com.mysql.jdbc.Driver");
             // 打开链接
-            System.out.println("Connect sql...");
+            //System.out.println("Connect sql...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
             // 执行查询
-            System.out.println("selecting...");
+            //System.out.println("selecting...");
             stmt = conn.createStatement();
             String sql;
             sql = "SELECT user_login FROM userlist WHERE user_login=\'"+user_Login+"\'";
@@ -65,7 +67,7 @@ public class MySQLConnect {
                 se.printStackTrace();
             }
         }
-        System.out.println("Goodbye!");
+        //System.out.println("Goodbye!");
         return ExistOrNot;
     }
 
@@ -89,9 +91,9 @@ public class MySQLConnect {
             Statement stmt = null;
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                System.out.println("Connect sql...");
+               // System.out.println("Connect sql...");
                 conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                System.out.println("selecting...");
+                //System.out.println("selecting...");
                 stmt = conn.createStatement();
                 String sql;
                 sql = "SELECT user_passwd FROM userlist WHERE user_login=\'" + Userlogin + "\'";
@@ -123,7 +125,7 @@ public class MySQLConnect {
                     }
                 }
             }
-                System.out.println("Goodbye!");
+                //System.out.println("Goodbye!");
 
                 return errorCode;
             }
@@ -150,10 +152,10 @@ public class MySQLConnect {
             try {// 注册 JDBC 驱动
                 Class.forName("com.mysql.jdbc.Driver");
                 // 打开链接
-                System.out.println("Connect sql...");
+              //  System.out.println("Connect sql...");
                 conn = DriverManager.getConnection(DB_URL, USER, PASS);
                 // 执行查询
-                System.out.println("selecting...");
+               // System.out.println("selecting...");
                 stmt = conn.createStatement();
                 String sql;
                 sql = "SELECT c1.userid from userlist c1,userlist c2 WHERE c1.userid>c2.userid";
@@ -174,7 +176,7 @@ public class MySQLConnect {
                 }
                 if(keyValue>0)
                 errorcode=0;
-                System.out.println("returncode"+keyValue+" ");
+               // System.out.println("returncode"+keyValue+" ");
                 // 完成后关闭
                 rs.close();
                 stmt.close();
@@ -197,7 +199,7 @@ public class MySQLConnect {
                     se.printStackTrace();
                 }
             }
-            System.out.println("Goodbye!");
+           // System.out.println("Goodbye!");
             return errorcode;
         }
     }
@@ -213,9 +215,9 @@ public class MySQLConnect {
         Statement stmt = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Connect sql...");
+           // System.out.println("Connect sql...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("selecting...");
+           // System.out.println("selecting...");
             stmt = conn.createStatement();
             String sql;
             sql = "SELECT user_login FROM userlist ";
@@ -242,9 +244,51 @@ public class MySQLConnect {
                     }
                 }
             }
-            System.out.println("Goodbye!");
+           // System.out.println("Goodbye!");
          return userList;
     }
+
+    public static String returnAllUser() {
+        String userList="";
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            //System.out.println("Connect sql...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+           // System.out.println("selecting...");
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT user_login FROM userlist ";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                // System.out.print(rs.getString("user_Login"));
+                userList+=rs.getString("user_Login")+",";
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException se2) {
+                try {
+                    if (conn != null) conn.close();
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }
+            }
+        }
+        //System.out.println("Goodbye!");
+        return userList;
+    }
+
+
+
 
     /**
      * define errorcode Too
@@ -266,9 +310,9 @@ public class MySQLConnect {
             Statement stmt = null;
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                System.out.println("Connect sql...");
+               // System.out.println("Connect sql...");
                 conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                System.out.println("selecting...");
+               // System.out.println("selecting...");
                 stmt = conn.createStatement();
                 String sql;
                 sql="INSERT INTO UserSentCard " +
@@ -320,19 +364,19 @@ public class MySQLConnect {
         Statement stmt = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Connect sql...");
+            //System.out.println("Connect sql...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("selecting...");
+           // System.out.println("selecting...");
             stmt = conn.createStatement();
             String sql;
-                sql = "SELECT userSend,Word FROM UserSentCard WHERE" +
+                sql = "SELECT userSend,Word FROM UserSentCard WHERE " +
                         "userReceive=\'"+userName+"\';";
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-
                 // System.out.print(rs.getString("user_Login"));
-                userCardList+=rs.getString("userSend")+"\t";
-                userCardList+=rs.getString("Word")+"\n";
+                userCardList+="From:"+rs.getString("userSend")+"\n";
+                userCardList+=rs.getString("Word")+": from YouDao \n"+
+                        parserjson.YouDaoTranslate(rs.getString("Word")) +"\n";
             }
             rs.close();
             stmt.close();
@@ -352,7 +396,7 @@ public class MySQLConnect {
                 }
             }
         }
-        System.out.println("Goodbye!");
+        //System.out.println("Goodbye!");
         return userCardList;
     }
 

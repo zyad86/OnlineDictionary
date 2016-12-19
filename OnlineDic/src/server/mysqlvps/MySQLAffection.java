@@ -22,9 +22,9 @@ public class MySQLAffection {
         Statement stmt = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Connect sql...");
+           // System.out.println("Connect sql...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("selecting...");
+          //  System.out.println("selecting...");
             stmt = conn.createStatement();
             String sql;
             sql = "INSERT INTO AffectionTable " +
@@ -36,7 +36,7 @@ public class MySQLAffection {
             if (rs.next()) {
                 keyValue = rs.getInt(1);
             }
-            System.out.println("returncode" + keyValue + " ");
+            //System.out.println("returncode" + keyValue + " ");
             rs.close();
             stmt.close();
             conn.close();
@@ -55,7 +55,7 @@ public class MySQLAffection {
                 se.printStackTrace();
             }
         }
-        System.out.println("Goodbye!");
+       // System.out.println("Goodbye!");
     }
 
     public static int[] ReturnFavor(String words) {
@@ -67,9 +67,9 @@ public class MySQLAffection {
         Statement stmt = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Connect sql...");
+            //System.out.println("Connect sql...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("selecting...");
+            //System.out.println("selecting...");
             stmt = conn.createStatement();
             String sql;
 
@@ -110,7 +110,7 @@ public class MySQLAffection {
                 }
             }
         }
-        System.out.println("Goodbye!");
+        //System.out.println("Goodbye!");
 //Define Company YouDao 1 Bing 2 JinShan 3
         if(forYouDao>forJinshan){
             if(forYouDao>forBing){
@@ -158,16 +158,14 @@ public class MySQLAffection {
                 }
             }}
 
+
         return affectionU;
 
     }
 
     public static void main(String[] args) {
-        UserAffectionSend("test",  "fantasy", 3);
-        int []receive=ReturnFavor("fantasy");
-        for(int i=0;i<receive.length;i++){
-            System.out.println(receive[i]);
-        }
+        //UserAffectionSend("test",  "fantasy", 3);
+        int []receive=ReturnFavor("love");
 
 
     }

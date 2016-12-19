@@ -1,49 +1,35 @@
 package server.mysqlvps;
-import jdk.internal.org.objectweb.asm.Handle;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.awt.*;
-import javax.swing.*;
 import jsonparser.parserjson;
 
 /**
  * Created by stdzysta on 2016/12/17.
  */
-public class MultiThreadServer  extends JFrame{
+public class MultiThreadServer  {
     ArrayList <String> usersOnline =new ArrayList<String>();
-
-    private JTextArea jta=new JTextArea();
     public static void main(String[] args){
         new MultiThreadServer();
     }
-
     public MultiThreadServer() {
 
         checkOnlineOrNot checkOnlineTask=new checkOnlineOrNot();
         new Thread(checkOnlineTask).start();
 
-
-        setLayout(new BorderLayout());
-        add(new JScrollPane(jta), BorderLayout.CENTER);
-        setTitle("MultiThreadServer");
-        setSize(500, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
-
         try {
             ServerSocket serverSocket = new ServerSocket(8000);
-            jta.append("Server started at" + new Date() + '\n');
+            System.out.println("Server started at" + new Date() + '\n');
             int clientNo = 1;
             while (true) {
                 Socket socket = serverSocket.accept();
-                jta.append("Starting thread for client" + clientNo +
+                System.out.print("Starting thread for client" + clientNo +
                         "at" + new Date() + "\n");
                 //socket.getRemoteSocketAddress();
                 InetAddress inetAddress = socket.getInetAddress();
-                jta.append("Client" + clientNo + "'s host name is " +
+                System.out.print("Client" + clientNo + "'s host name is " +
                         inetAddress.getHostName() + "\n");
-                jta.append("Client" + clientNo + "'s IP Address is"
+                System.out.print("Client" + clientNo + "'s IP Address is"
                         + socket.getRemoteSocketAddress()+ "\n");
 
                 HandleAClient task = new HandleAClient(socket);
@@ -95,10 +81,10 @@ public class MultiThreadServer  extends JFrame{
                             String userPasswd=getfromClient.getUser_passwd();
                             int errorCode=MySQLConnect.sigUpNewUser(userLogin,userPasswd);
                             switch (errorCode){
-                                case 0: jta.append("User Regist Success:" + getfromClient.getUser_login() + '\n');break;
-                                case 1: jta.append("User_login name already exist:" + getfromClient.getUser_login() + '\n');break;
-                                case 2: jta.append("Invalid Username Please Retry:" + getfromClient.getUser_login() + '\n');break;
-                                default:jta.append("default nothing ");break;
+                                case 0:  System.out.println("User Regist Success:" + getfromClient.getUser_login() + '\n');break;
+                                case 1:  System.out.println("User_login name already exist:" + getfromClient.getUser_login() + '\n');break;
+                                case 2:  System.out.println("Invalid Username Please Retry:" + getfromClient.getUser_login() + '\n');break;
+                                default: System.out.println("default nothing ");break;
                             }
 
                             UserSet returnSet=new UserSet(0,errorCode);
@@ -112,10 +98,10 @@ public class MultiThreadServer  extends JFrame{
                             String userPasswd=getfromClient.getUser_passwd();
                             int errorCode=MySQLConnect.loginOldUser(userLogin,userPasswd);
                             switch (errorCode){
-                                case 0: jta.append("User Login Success:" + getfromClient.getUser_login() + '\n');break;
-                                case 1: jta.append("User_login Wrong Password:" + getfromClient.getUser_login() + '\n');break;
-                                case 2: jta.append("User_login name not exist:" + getfromClient.getUser_login() + '\n');break;
-                                default:jta.append("default nothing ");break;
+                                case 0:  System.out.println("User Login Success:" + getfromClient.getUser_login() + '\n');break;
+                                case 1:  System.out.println("User_login Wrong Password:" + getfromClient.getUser_login() + '\n');break;
+                                case 2:  System.out.println("User_login name not exist:" + getfromClient.getUser_login() + '\n');break;
+                                default: System.out.println("default nothing ");break;
                             }
                             UserSet returnSet=new UserSet(1,errorCode);
                             outputToClient.writeObject(returnSet);
@@ -128,7 +114,7 @@ public class MultiThreadServer  extends JFrame{
                             boolean userOnlineExist=false;
                             String userLoginOnline=getfromClient.getWord();
                             for(int i=0;i<usersOnline.size();i++){
-                                if(userLoginOnline==usersOnline.get(i))
+                                if(userLoginOnline.equals(usersOnline.get(i)))
                                 {
                                     userOnlineExist=true;
                                     break;
@@ -171,7 +157,7 @@ public class MultiThreadServer  extends JFrame{
                             String allUsers=MySQLConnect.returnUserlist();
                             String UsersOnline="";
                             for(int i=0;i<usersOnline.size();i++){
-                                UsersOnline+=usersOnline.get(i);
+                                UsersOnline+=usersOnline.get(i)+"\n";
                             }
                             UserSet returnSet=new UserSet(allUsers,UsersOnline);
                             outputToClient.writeObject(returnSet);
@@ -181,6 +167,15 @@ public class MultiThreadServer  extends JFrame{
                          * refresh state
                          */
                         case 7: {
+                            if(getfromClient.getUser_send().equals("all")){
+                                String allUser=MySQLConnect.returnAllUser();
+
+                                String[] userlistAll = allUser.split(",");
+                                for(int i=0;i<userlistAll.length;i++)
+                                    MySQLConnect.sendWord(getfromClient.getUser_login(),
+                                            userlistAll[i],getfromClient.getWord());
+                            }
+                            else
                             MySQLConnect.sendWord(getfromClient.getUser_login(),
                                     getfromClient.getUser_send(),getfromClient.getWord());
 

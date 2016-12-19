@@ -1,7 +1,9 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 /*root类选择器给所有的元素设置样式*/
 .root {
+    -fx-background-color: #1c77e5;
     -fx-font-family: "微软雅黑";
+    -fx-font-color: #000000;
     -fx-font-size: 16px;
     -fx-background-size: stretch stretch;
     -fx-background-image: url(background.jpg);
